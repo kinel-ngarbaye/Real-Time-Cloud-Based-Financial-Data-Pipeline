@@ -1,0 +1,27 @@
+from google.cloud import pubsub_v1
+import random
+import json
+import time
+
+project_id = "your-gcp-project-id"
+topic_id = "financial-data-topic"
+
+publisher = pubsub_v1.PublisherClient()
+topic_path = publisher.topic_path(project_id, topic_id)
+
+# Simulate stock price data
+def generate_stock_data():
+    stocks = ['AAPL', 'GOOGL', 'MSFT', 'TSLA']
+    return {
+        'symbol': random.choice(stocks),
+        'price': round(random.uniform(100, 1500), 2),
+        'timestamp': time.time()
+    }
+
+# Publish data to Pub/Sub
+while True:
+    stock_data = generate_stock_data()
+    message = json.dumps(stock_data).encode("utf-8")
+    future = publisher.publish(topic_path, data=message)
+    print(f"Published: {stock_data}")
+    time.sleep(1)  # Publish every second

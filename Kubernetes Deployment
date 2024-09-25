@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: financial-data-pipeline
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pipeline
+  template:
+    metadata:
+      labels:
+        app: pipeline
+    spec:
+      containers:
+      - name: pipeline-container
+        image: your-docker-image
+        ports:
+        - containerPort: 8080
